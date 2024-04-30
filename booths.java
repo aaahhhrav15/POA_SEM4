@@ -86,6 +86,7 @@ public class booths
 		}
 
 		P = P.substring(0, P.length() - 1);
+		
 		System.out.println("-------------------------------------------------------------------------");
 
 		System.out.println("The product of the numbers entered in binary is " + P);
