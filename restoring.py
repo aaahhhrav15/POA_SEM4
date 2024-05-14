@@ -66,4 +66,3 @@ print("Count\tA\t\tQ\t\tAny action")
 print("---------------------------------------------------------------")
 
 print(restoring('0'*n, q.zfill(n), m, n, n))
-

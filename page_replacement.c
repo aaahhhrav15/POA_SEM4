@@ -1,22 +1,11 @@
 #include <stdio.h>
 int n, nf;
-int in[100];
+int sequence[100];
 int p[50];
 int hit = 0;
 int i, j, k;
 int pgfaultcnt = 0;
-void getData()
-{
-    printf("\nEnter length of page reference sequence:");
-    scanf("%d", &n);
-    printf("\nEnter the page reference sequence:");
-    for (i = 0; i < n; i++)
-    {
-        scanf("%d", &in[i]);
-    }
-    printf("\nEnter no of frames:");
-    scanf("%d", &nf);
-}
+
 void initialize()
 {
     pgfaultcnt = 0;
@@ -39,19 +28,6 @@ int isHit(int data)
     }
     return hit;
 }
-int getHitIndex(int data)
-{
-    int hitind;
-    for (k = 0; k < nf; k++)
-    {
-        if (p[k] == data)
-        {
-            hitind = k;
-            break;
-        }
-    }
-    return hitind;
-}
 void dispPages()
 {
     for (k = 0; k < nf; k++)
@@ -73,9 +49,9 @@ void fifo()
     initialize();
     for (i = 0; i < n; i++)
     {
-        printf("\nFor %d :", in[i]);
+        printf("\nFor %d :", sequence[i]);
 
-        if (isHit(in[i]) == 0)
+        if (isHit(sequence[i]) == 0)
         {
 
             for (k = 0; k < nf - 1; k++)
@@ -83,12 +59,14 @@ void fifo()
                 p[k] = p[k + 1];
             }
 
-            p[k] = in[i];
+            p[k] = sequence[i];
             pgfaultcnt++;
             dispPages();
         }
         else
+        {
             printf("No page fault");
+        }
     }
     dispPgFaultCnt();
 }
@@ -98,9 +76,9 @@ void optimal()
     int near[50];
     for (i = 0; i < n; i++)
     {
-        printf("\nFor %d :", in[i]);
+        printf("\nFor %d :", sequence[i]);
 
-        if (isHit(in[i]) == 0)
+        if (isHit(sequence[i]) == 0)
         {
 
             for (j = 0; j < nf; j++)
@@ -109,7 +87,7 @@ void optimal()
                 int found = 0;
                 for (k = i; k < n; k++)
                 {
-                    if (pg == in[k])
+                    if (pg == sequence[k])
                     {
                         near[j] = k;
                         found = 1;
@@ -135,7 +113,7 @@ void optimal()
                     repindex = j;
                 }
             }
-            p[repindex] = in[i];
+            p[repindex] = sequence[i];
             pgfaultcnt++;
 
             dispPages();
@@ -154,8 +132,8 @@ void lru()
     int least[50];
     for (i = 0; i < n; i++)
     {
-        printf("\nFor %d :", in[i]);
-        if (isHit(in[i]) == 0)
+        printf("\nFor %d :", sequence[i]);
+        if (isHit(sequence[i]) == 0)
         {
             for (j = 0; j < nf; j++)
             {
@@ -163,7 +141,7 @@ void lru()
                 int found = 0;
                 for (k = i - 1; k >= 0; k--)
                 {
-                    if (pg == in[k])
+                    if (pg == sequence[k])
                     {
                         least[j] = k;
                         found = 1;
@@ -181,7 +159,7 @@ void lru()
             }
             int min = 9999;
             int repindex;
-            for (j = 0; j < nf; j++)
+            for(j = 0; j < nf; j++)
             {
                 if (least[j] < min)
                 {
@@ -189,7 +167,7 @@ void lru()
                     repindex = j;
                 }
             }
-            p[repindex] = in[i];
+            p[repindex] = sequence[i];
             pgfaultcnt++;
 
             dispPages();
@@ -205,27 +183,20 @@ void lru()
 
 int main()
 {
-    int choice;
-    getData();
-    while (1)
+
+    printf("\nEnter length of page reference sequence:");
+    scanf("%d", &n);
+    printf("\nEnter the page reference sequence:");
+    for (i = 0; i < n; i++)
     {
-        printf("\nPage Replacement Algorithms\n1.FIFO\n2.Optimal\n3.LRU\n4.Exit\nEnter your choice:");
-        scanf("%d", &choice);
-        switch (choice)
-        {
-            case 1:
-                fifo();
-                break;
-            case 2:
-                optimal();
-                break;
-            case 3:
-                lru();
-                break;
-            default:
-                return 0;
-                break;
-        }
+        scanf("%d", &sequence[i]);
     }
+    printf("\nEnter no of frames:");
+    scanf("%d", &nf);
+
+    fifo();
+    optimal();
+    lru();
+
     return 0;
 }
