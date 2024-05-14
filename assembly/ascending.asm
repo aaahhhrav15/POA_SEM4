@@ -19,7 +19,7 @@ CODE SEGMENT
     mov al,[si]
     mov bl,[si+1]
     cmp al,bl
-    jc down
+    jc down       //jnc for descending order
     mov dl,[si+1]
     xchg [si],dl
     mov [si+1],dl
