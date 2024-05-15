@@ -1,0 +1,21 @@
+fact macro f
+    x:MUL NUM
+    DEC NUM
+    JNZ x
+endm
+
+DATA SEGMENT
+    NUM DW 3
+    RESULT DW ?
+DATA ENDS
+
+CODE SEGMENT
+    ASSUME CS:CODE,DS:DATA
+    START:
+    MOV AX,DATA
+    MOV DS,AX
+    MOV AX,0001h
+    fact NUM  
+    MOV RESULT,AX
+CODE ENDS
+END START
